@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Setup Luxaflex Gen 3 Shade",
+        "description": "Enter the details of your Luxaflex Gen 3 shade.",
+        "data": {
+          "name": "Name",
+          "mac_address": "MAC Address",
+          "encryption_key": "Encryption Key (optional)",
+          "ble_timeout": "BLE Timeout (seconds)",
+          "scan_interval": "Scan Interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "invalid_mac": "Invalid MAC address format",
+      "invalid_key": "Invalid encryption key format"
+    }
+  },
+  "title": "Luxaflex Gen 3"
+}
