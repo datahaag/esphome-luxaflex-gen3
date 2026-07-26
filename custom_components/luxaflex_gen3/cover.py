@@ -49,7 +49,7 @@ class LuxaflexGen3Cover(LuxaflexGen3Entity, CoverEntity):
 
     def __init__(self, client, name, mac_address, ble_timeout, scan_interval):
         """Initialize the cover."""
-        super().__init__(None, mac_address, name)
+        super().__init__(mac_address, name)
         self._client = client
         self._ble_timeout = ble_timeout
         self._scan_interval = scan_interval
