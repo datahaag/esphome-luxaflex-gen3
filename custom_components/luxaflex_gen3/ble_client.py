@@ -5,6 +5,7 @@ import logging
 from typing import Optional
 
 from bleak import BleakClient, BleakError
+from bleak_retry_connector import establish_connection
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 from .const import (
@@ -33,8 +34,9 @@ class LuxaflexBLEClient:
     async def connect(self, timeout: int = 6) -> bool:
         """Connect to the shade."""
         try:
-            self.client = BleakClient(self.mac_address, timeout=timeout)
-            await self.client.connect()
+            self.client = await establish_connection(
+                BleakClient, self.mac_address, self.mac_address, timeout=timeout
+            )
             self._connected = True
             _LOGGER.info("Connected to Luxaflex shade %s", self.mac_address)
             return True
