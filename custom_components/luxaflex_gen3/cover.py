@@ -3,7 +3,11 @@
 import logging
 from typing import Any
 
-from homeassistant.components.cover import CoverDeviceClass, CoverEntity
+from homeassistant.components.cover import (
+    CoverDeviceClass,
+    CoverEntity,
+    CoverEntityFeature,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -51,10 +55,10 @@ class LuxaflexGen3Cover(LuxaflexGen3Entity, CoverEntity):
         self._scan_interval = scan_interval
         self._attr_device_class = CoverDeviceClass.BLIND
         self._attr_supported_features = (
-            CoverEntity.Feature.OPEN
-            | CoverEntity.Feature.CLOSE
-            | CoverEntity.Feature.STOP
-            | CoverEntity.Feature.SET_POSITION
+            CoverEntityFeature.OPEN
+            | CoverEntityFeature.CLOSE
+            | CoverEntityFeature.STOP
+            | CoverEntityFeature.SET_POSITION
         )
         self._current_position = None
         self._is_closed = None
