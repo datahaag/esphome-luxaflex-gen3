@@ -41,7 +41,7 @@ class LuxaflexBLEClient:
             _LOGGER.info("Connected to Luxaflex shade %s", self.mac_address)
             return True
         except (BleakError, asyncio.TimeoutError) as err:
-            _LOGGER.error("Failed to connect to %s: %s", self.mac_address, err)
+            _LOGGER.error("Failed to connect to %s: %s", self.mac_address, str(err))
             self._connected = False
             return False
 
@@ -91,7 +91,7 @@ class LuxaflexBLEClient:
             _LOGGER.debug("Sent command %d with position %d to %s", command, position, self.mac_address)
             return True
         except (BleakError, AttributeError) as err:
-            _LOGGER.error("Failed to send command to %s: %s", self.mac_address, err)
+            _LOGGER.error("Failed to send command to %s: %s", self.mac_address, str(err))
             return False
 
     async def open(self) -> bool:
