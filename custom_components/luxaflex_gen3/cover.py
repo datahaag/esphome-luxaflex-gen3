@@ -98,7 +98,7 @@ class LuxaflexGen3Cover(LuxaflexGen3Entity, CoverEntity):
             await self._client.disconnect()
             return result
         except Exception as err:
-            _LOGGER.error("Error executing command: %s", str(err))
+            _LOGGER.error("Error executing command: %s", str(err), exc_info=True)
             await self._client.disconnect()
             return False
 
