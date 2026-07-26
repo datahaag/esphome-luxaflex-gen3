@@ -11,11 +11,20 @@
           "ble_timeout": "BLE Timeout (seconds)",
           "scan_interval": "Scan Interval (seconds)"
         }
+      },
+      "discovery": {
+        "title": "Discover Luxaflex Gen 3 Shades",
+        "description": "Scanning for Luxaflex Gen 3 shades with names starting with DUT or SIL...",
+        "data": {
+          "devices": "Select shades to add"
+        }
       }
     },
     "error": {
       "invalid_mac": "Invalid MAC address format",
-      "invalid_key": "Invalid encryption key format"
+      "invalid_key": "Invalid encryption key format",
+      "discovery_failed": "BLE discovery failed: {error}",
+      "no_devices_found": "No Luxaflex Gen 3 shades found with names starting with DUT or SIL"
     }
   },
   "title": "Luxaflex Gen 3"

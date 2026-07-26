@@ -27,3 +27,6 @@ COMMAND_TILT = 0x05
 DEVICE_TYPE_ROLLER = "roller"
 DEVICE_TYPE_DUAL = "dual"
 DEVICE_TYPE_TILT = "tilt"
+
+# BLE name prefixes for auto-discovery
+BLE_NAME_PREFIXES = ["DUT", "SIL"]
