@@ -35,7 +35,7 @@ class LuxaflexBLEClient:
         """Connect to the shade."""
         try:
             self.client = await establish_connection(
-                BleakClient, self.mac_address, self.mac_address, timeout=timeout
+                BleakClient, self.mac_address, name=self.mac_address, timeout=timeout
             )
             self._connected = True
             _LOGGER.info("Connected to Luxaflex shade %s", self.mac_address)
