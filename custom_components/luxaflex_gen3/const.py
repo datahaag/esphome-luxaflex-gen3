@@ -12,9 +12,9 @@ CONF_SCAN_INTERVAL = "scan_interval"
 DEFAULT_BLE_TIMEOUT = 6
 DEFAULT_SCAN_INTERVAL = 15
 
-# BLE Service UUIDs (to be determined from protocol analysis)
-SERVICE_UUID = "00001800-0000-1000-8000-00805f9b34fb"  # Generic Access
-CHARACTERISTIC_UUID = "00002a00-0000-1000-8000-00805f9b34fb"  # Device Name
+# BLE Service UUIDs
+SERVICE_UUID = "0000fdc1-0000-1000-8000-00805f9b34fb"  # Luxaflex Gen 3 Service
+CHARACTERISTIC_UUID = "CAFE1002-C0FF-EE01-8000-A110CA7AB1E0"  # Command Characteristic
 
 # Command constants
 COMMAND_OPEN = 0x01
