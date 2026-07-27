@@ -85,8 +85,9 @@ class LuxaflexBLEClient:
         # Convert hex key to bytes
         key_bytes = bytes.fromhex(self.encryption_key)
         
-        # Encrypt using AES-CTR
-        cipher = Cipher(algorithms.AES(key_bytes), modes.CTR(nonce=b""))
+        # Encrypt using AES-CTR with 16-byte counter
+        # Using modes.CTR with nonce parameter
+        cipher = Cipher(algorithms.AES(key_bytes), modes.CTR(nonce=bytes(16)))
         encryptor = cipher.encryptor()
         encrypted = encryptor.update(command) + encryptor.finalize()
         
