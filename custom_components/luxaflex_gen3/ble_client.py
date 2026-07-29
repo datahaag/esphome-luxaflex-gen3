@@ -37,10 +37,11 @@ class LuxaflexBLEClient:
         
         for attempt in range(max_retries):
             try:
+                _LOGGER.info("Attempting to connect to %s (attempt %d/%d)", self.mac_address, attempt + 1, max_retries)
                 self.client = BleakClient(self.mac_address, timeout=timeout)
                 await self.client.connect()
                 self._connected = True
-                _LOGGER.info("Connected to Luxaflex shade %s", self.mac_address)
+                _LOGGER.info("Successfully connected to Luxaflex shade %s", self.mac_address)
                 return True
             except (BleakError, asyncio.TimeoutError) as err:
                 _LOGGER.error(
@@ -56,6 +57,7 @@ class LuxaflexBLEClient:
                 if attempt < max_retries - 1:
                     await asyncio.sleep(retry_delay)
         
+        _LOGGER.error("All connection attempts failed for %s", self.mac_address)
         return False
 
     async def disconnect(self) -> None:
@@ -71,17 +73,21 @@ class LuxaflexBLEClient:
 
     def _build_command(self, position: int, seq: int = 1) -> bytes:
         """Build command frame based on ajain189 implementation."""
+        _LOGGER.debug("Building command for position %d, seq %d", position, seq)
         p = (position * 100).to_bytes(2, 'little')
         pl = p + bytes([0, 128, 0, 128, 0, 128, 0])
         h = (0x01F7).to_bytes(2, 'little') + bytes([seq, len(pl)])
-        return h + pl
+        command = h + pl
+        _LOGGER.debug("Built command: %s", command.hex())
+        return command
 
     def _encrypt_command(self, command: bytes) -> bytes:
         """Encrypt command using AES-CTR (ajain189 implementation)."""
         if not self.encryption_key:
-            # No encryption key, return unencrypted command
+            _LOGGER.warning("No encryption key provided, sending unencrypted command")
             return command
 
+        _LOGGER.debug("Encrypting command with key: %s", self.encryption_key)
         # Convert hex key to bytes
         key_bytes = bytes.fromhex(self.encryption_key)
         
@@ -91,24 +97,28 @@ class LuxaflexBLEClient:
         encryptor = cipher.encryptor()
         encrypted = encryptor.update(command) + encryptor.finalize()
         
+        _LOGGER.debug("Encrypted command: %s", encrypted.hex())
         return encrypted
 
     async def send_command(self, position: int) -> bool:
         """Send a command to the shade."""
+        _LOGGER.info("Sending command to %s with position %d", self.mac_address, position)
+        
         if not self.is_connected():
-            _LOGGER.error("Not connected to shade")
+            _LOGGER.error("Not connected to shade %s", self.mac_address)
             return False
 
         try:
             command = self._build_command(position)
             encrypted_command = self._encrypt_command(command)
             
+            _LOGGER.info("Writing to characteristic %s", CHARACTERISTIC_UUID)
             # Write to characteristic
             await self.client.write_gatt_char(CHARACTERISTIC_UUID, encrypted_command, response=False)
-            _LOGGER.debug("Sent command with position %d to %s", position, self.mac_address)
+            _LOGGER.info("Successfully sent command with position %d to %s", position, self.mac_address)
             return True
         except (BleakError, AttributeError) as err:
-            _LOGGER.error("Failed to send command to %s: %s", self.mac_address, str(err))
+            _LOGGER.error("Failed to send command to %s: %s", self.mac_address, str(err), exc_info=True)
             return False
 
     async def open(self) -> bool:
